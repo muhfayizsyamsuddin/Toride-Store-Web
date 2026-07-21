@@ -1,0 +1,20 @@
+services:
+  toride-store:
+    # build: .
+    image: faizms14/toride-store-app:v1.0
+    container_name: toride-store-app
+    # ports:
+    #   - "8080:80" # Port 8080 di VPS akan diteruskan ke port 80 Nginx
+    networks:
+      - proxy_net
+    labels:
+      traefik.enable: true
+      traefik.docker.network: proxy_net
+      traefik.http.routers.toridestore.rule: Host(`toridestore.faizms.com`)
+      traefik.http.routers.toridestore.entrypoints: websecure
+      traefik.http.routers.toridestore.tls.certresolver: myresolver
+      traefik.http.services.toridestore.loadbalancer.server.port: 80
+
+networks:
+  proxy_net:
+    external: true
